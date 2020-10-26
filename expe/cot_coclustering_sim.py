@@ -1,6 +1,6 @@
 #%% Reproduce Table 3 for COOT
 import sys
-sys.path.append('../lib')
+sys.path.append('../code')
 import numpy as np
 from sklearn.metrics import *
 from blockSim import *

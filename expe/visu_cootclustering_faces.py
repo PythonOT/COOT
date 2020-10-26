@@ -1,7 +1,7 @@
 # Reproduce Fig 4 of the paper
 
 import sys
-sys.path.append('../lib')
+sys.path.append('../code')
 import numpy as np
 from scipy import ndimage
 import scipy as sp

@@ -9,7 +9,7 @@ from scipy.io import loadmat
 from sklearn import preprocessing
 from sklearn.metrics import euclidean_distances
 import sys
-sys.path.append('../lib')
+sys.path.append('../code')
 from cot import *
 from functools import reduce
 

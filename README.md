@@ -11,7 +11,7 @@ If you use this toolbox in your research and find it useful, please cite COOT us
 ```
 @incollection{coot_2020,
 title = {CO-Optimal Transport},
-author = {Ievgen, Redko and Vayer, Titouan and Flamary, R\'{e}mi and Courty, Nicolas},
+author = {Redko, Ievgen, Vayer, Titouan, Flamary, R\'{e}mi and Courty, Nicolas},
 booktitle = {Advances in Neural Information Processing Systems 33},
 year = {2020}
 }
@@ -25,7 +25,7 @@ year = {2020}
 
 ### What is included ?
 
-* The main function that computes the COOT problem between two datasets in the lib folder (file cot.py)
+* The main function that computes the COOT problem between two datasets in the code folder (file cot.py)
 
 * Demo notebooks:
 	- [coot_mnist.ipynb](./example/coot_mnist.ipynb): COOT on the MNIST/USPS problem

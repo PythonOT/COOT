@@ -1,7 +1,7 @@
 #%% Reproduce MovieLens Experiment of the paper
 
 import sys
-sys.path.append('../lib')
+sys.path.append('../code')
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
