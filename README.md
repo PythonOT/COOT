@@ -25,6 +25,17 @@ year = {2020}
 
 ### What is included ?
 
+* The main function that computes the COOT problem between two datasets in the lib folder (file cot.py)
+
+* Demo notebooks:
+	- [coot_mnist.ipynb](./example/coot_mnist.ipynb): COOT on the MNIST/USPS problem
+
+![](./example/mnist_usps.png)
+
+* Code to repoduce results of the paper in the expe folder.
+
+![](./expe/clootclustering_faces.png)
+
 
 ### Authors
 * [Ievgen Redko](https://ievred.github.io/)
