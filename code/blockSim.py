@@ -1,18 +1,19 @@
 import numpy as np
 
 
-def partitionrnd(n, prop, g, seed=2):
+def partitionrnd(n, prop, g, seed=None):
 	"""Generate a random partition.
 	n    : number of instances
 	prop : proportion of clusters
 	g    : number of clusters
 	"""
-	np.random.seed(seed)
+	if seed is not None:
+		np.random.seed(seed)
 	tmp = np.random.uniform(low=0.0, high=1.0, size=n)
 	return g + 1 - np.sum(np.tile(tmp, (g, 1)).T < np.tile(np.cumsum(prop), (n, 1)), axis=1)
 
 
-def generatedata(mu, n=100, d=100, prop_r=None, prop_c=None, noise=1, sigma = None, seed=2):
+def generatedata(mu, n=100, d=100, prop_r=None, prop_c=None, noise=1, sigma = None, seed=None):
 	"""Generate a data matrix with a gxm bloc structure.
 	n      : number of rows
 	d      : number of columns
@@ -23,7 +24,8 @@ def generatedata(mu, n=100, d=100, prop_r=None, prop_c=None, noise=1, sigma = No
 	mu     : a gxm matrix with the mean of each block
 	Return the matrix and the partitions
 	"""
-	np.random.seed(seed)
+	if seed is not None:
+		np.random.seed(seed)
 	g, m = mu.shape
 	if prop_r is None:
 		prop_r = (1 / g * np.ones(g))
