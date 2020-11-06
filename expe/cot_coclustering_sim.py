@@ -1,23 +1,24 @@
-#%% Reproduce Table 3 for COOT
-import sys
-sys.path.append('../code')
 import numpy as np
 from sklearn.metrics import *
+import sys
+sys.path.append("../code/")
 from blockSim import *
-from cot import cot_numpy
-#%%
-def cot_clustering(X, ns, nv, niter_cluster=10, niter=10, algo1='emd', algo2 = 'emd', reg1 = 0, reg2 = 0, verbose = False):
+from cot import *
+
+def cot_clustering(X, ns, nv, niter_cluster=10, niter=10, algo1='emd', algo2 = 'emd', reg1 = 0., reg2 = 0., verbose = False):
     Xc = np.random.randn(ns, nv)
     old_cost = 0
 
     for i in range(niter_cluster):
-        Ts, Tv, cost = cot_numpy(X, Xc, niter=10, algo=algo1, reg = reg1, algo2 = algo2, reg2 = reg2, verbose=False)
+        Ts, Tv, cost = cot_numpy(X, Xc, niter=niter, algo=algo1, reg = reg1, algo2 = algo2, reg2 = reg2, verbose=verbose)
         Xc = Ts.T.dot(X).dot(Tv) * ns * nv
 
         if verbose:
             print(cost)
 
-        if abs(old_cost - cost) == 0:
+        if np.abs(old_cost - cost) < 1e-7:
+            if verbose:
+                print('converged at iter ', i)
             break
 
         old_cost = cost
@@ -27,7 +28,7 @@ def cot_clustering(X, ns, nv, niter_cluster=10, niter=10, algo1='emd', algo2 = '
 
     return Ts, Tv, Xc
 
-#%%
+
 mu = []
 sigma = []
 prop_r = []
@@ -81,21 +82,20 @@ reg_v = [0.1, 0.3, 0.3, 0.04]
 
 nrep = 100
 err_cc, err_r, err_c = [], [], []
-#%%
-np.random.seed(42)
-#%%
+
 for i in range(len(mu)):
 
     print("Data set D"+str(i+1))
-    dat, z, w = generatedata(n=ns[i], d=ds[i], prop_r=prop_r[i],
-                             prop_c=prop_c[i], mu=mu[i], noise=sigmas[i])
     reg1 = reg_c[i]
     reg2 = reg_v[i]
 
     for j in range(nrep):
 
+        dat, z, w = generatedata(n=ns[i], d=ds[i], prop_r=prop_r[i],
+                                 prop_c=prop_c[i], mu=mu[i], noise=sigmas[i])
+
         Ts, Tv, Xc = cot_clustering(X = dat, ns = nb_r[i], nv = nb_c[i],
-                                    niter_cluster=2, niter=10, algo1=algo1, algo2=algo2, reg1=reg1, reg2=reg2, verbose = False)
+                                    niter_cluster=20, niter=100, algo1=algo1, algo2=algo2, reg1=reg1, reg2=reg2, verbose=False)
 
         yr = Ts.argmax(1)
         yc = Tv.argmax(1)
