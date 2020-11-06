@@ -1,27 +1,24 @@
-#%% Reproduce MovieLens Experiment of the paper
-
-import sys
-sys.path.append('../code')
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from cot import cot_numpy
-from scipy.stats import mode
-#%%
-def cot_clustering(X, ns, nv, niter_cluster, niter, algo1='emd', algo2 = 'emd', reg1 = 0, reg2 = 0, verbose = False):
-    
-    
+import sys
+sys.path.append("../code/")
+from cot import *
+
+def cot_clustering(X, ns, nv, niter_cluster=10, niter=10, algo1='emd', algo2 = 'emd', reg1 = 0., reg2 = 0., verbose = False):
     Xc = np.random.randn(ns, nv)
     old_cost = 0
 
     for i in range(niter_cluster):
-        Ts, Tv, cost = cot_numpy(X, Xc, niter=niter, algo=algo1, reg = reg1, algo2 = algo2, reg2 = reg2, verbose=False)
+        Ts, Tv, cost = cot_numpy(X, Xc, niter=niter, algo=algo1, reg = reg1, algo2 = algo2, reg2 = reg2, verbose=verbose)
         Xc = Ts.T.dot(X).dot(Tv) * ns * nv
 
         if verbose:
             print(cost)
 
-        if abs(old_cost - cost) == 0:
+        if np.abs(old_cost - cost) < 1e-7:
+            if verbose:
+                print('converged at iter ', i)
             break
 
         old_cost = cost
@@ -31,13 +28,11 @@ def cot_clustering(X, ns, nv, niter_cluster, niter, algo1='emd', algo2 = 'emd', 
 
     return Ts, Tv, Xc
 
-
-
 # Import the data and get the rating matrix
 df = pd.read_csv("../data/ml-100k/u.data", delimiter='\t',header=None, names=["user", "item", "rating", "timestamp"])
 R_df = df.pivot(index = 'user', columns ='item', values = 'rating').fillna(0).values
 
-movies = pd.read_csv('../data/ml-100k/u.item', sep='|',  header=None, encoding='latin-1').get_values()[:,1]
+movies = pd.read_csv('../data/ml-100k/u.item', sep='|',  header=None, encoding='latin-1').values[:,1]
 
 mean_ratings = np.true_divide(R_df.sum(0),(R_df!=0).sum(0))
 idx_best = np.argsort(mean_ratings)[::-1].tolist()
